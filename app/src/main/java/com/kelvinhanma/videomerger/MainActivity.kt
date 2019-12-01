@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private fun initUi() {
         val scanButton = findViewById<Button>(R.id.scan_button)
         scanButton.setOnClickListener {
+
             VideoProcessor().run(applicationContext)
         }
     }
