@@ -3,6 +3,7 @@ package com.kelvinhanma.videomerger.videoprocessing
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import com.kelvinhanma.videomerger.model.Video
 import com.kelvinhanma.videomerger.util.toHumanReadableString
 import java.util.logging.Logger
 
@@ -14,9 +15,8 @@ class VideoProcessor {
         val LOGGER = Logger.getLogger("VideoProcessor")
     }
 
-    fun run(context: Context) {
+    fun run(context: Context): List<Video> {
         LOGGER.info("staring media scan.")
-
         val uri: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
         val projection =
             arrayOf(
@@ -25,6 +25,9 @@ class VideoProcessor {
                 MediaStore.Video.VideoColumns.DATE_TAKEN,
                 MediaStore.Video.VideoColumns.DURATION
             )
+
+        val videos: MutableList<Video> = ArrayList()
+
         context.contentResolver.query(
             uri,
             projection,
@@ -36,13 +39,21 @@ class VideoProcessor {
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
+                val id =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
+                val name =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME))
                 val timestamp =
                     cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
+                val duration =
+                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
                 LOGGER.info(
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME)) + " : " + timestamp.toHumanReadableString()
-                            + " : " + cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
+                    id + " , " + name + ":" + timestamp.toHumanReadableString()
+                            + " , " + duration
                 )
+                videos.add(Video(id, name, timestamp, duration))
             }
         }
+        return videos
     }
 }

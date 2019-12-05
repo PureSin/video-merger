@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.kelvinhanma.videomerger.videoprocessing.VideoProcessor
+import com.kelvinhanma.videomerger.model.VideosViewModel
 
 class MainActivity : AppCompatActivity() {
+    lateinit var model: VideosViewModel
+
     companion object {
         val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
     }
@@ -24,14 +26,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         initUi()
+
+        model = VideosViewModel(applicationContext)
     }
 
     // TODO add a view to list detected video
     private fun initUi() {
         val scanButton = findViewById<Button>(R.id.scan_button)
         scanButton.setOnClickListener {
-
-            VideoProcessor().run(applicationContext)
+            model.loadData()
         }
     }
 
