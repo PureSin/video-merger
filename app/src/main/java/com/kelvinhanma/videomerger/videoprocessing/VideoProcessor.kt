@@ -56,4 +56,30 @@ class VideoProcessor {
         }
         return videos
     }
+
+    // TODO write tests
+    fun detectMergeableVideos(videos: List<Video>, allowedDeltaSecs: Int = 5): List<List<Video>> {
+        val result = ArrayList<ArrayList<Video>>()
+        val size = videos.size
+
+        for ((startIndex, video) in videos.withIndex()) {
+            val maxTime = video.dateTaken + video.dateTaken
+            var candidatesFound = false
+            for (candidateVideoIndex in startIndex + 1 until size) {
+                val candidateVideo = videos[candidateVideoIndex]
+                if (candidateVideo.dateTaken in maxTime - allowedDeltaSecs .. maxTime + allowedDeltaSecs) {
+                    if (!candidatesFound) {
+                        candidatesFound = true
+                        val newList = ArrayList<Video>()
+                        newList.add(video)
+                        newList.add(candidateVideo)
+                        result.add(newList)
+                    } else {
+                        result.last().add(candidateVideo)
+                    }
+                }
+            }
+        }
+        return result
+    }
 }
