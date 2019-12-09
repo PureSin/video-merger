@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.kelvinhanma.videomerger.model.VideosViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         initUi()
 
-        model = VideosViewModel(applicationContext)
+        model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
     }
 
     // TODO add a view to list detected video

@@ -1,17 +1,19 @@
 package com.kelvinhanma.videomerger.model
 
+import android.app.Application
 import android.content.Context
 import android.os.AsyncTask
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.kelvinhanma.videomerger.videoprocessing.VideoProcessor
 
-class VideosViewModel(val applicationContext: Context) : ViewModel() {
+class VideosViewModel : AndroidViewModel {
     var videosLiveData: MutableLiveData<List<Video>>
     val context: Context
 
-    init {
+
+    constructor(applicationContext: Application) : super(applicationContext) {
         this.context = applicationContext
         videosLiveData = MutableLiveData()
     }
