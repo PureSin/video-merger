@@ -7,11 +7,19 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.kelvinhanma.videomerger.model.Video
 import com.kelvinhanma.videomerger.model.VideosViewModel
 
+
 class MainActivity : AppCompatActivity() {
-    lateinit var model: VideosViewModel
+    private lateinit var model: VideosViewModel
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var recyclerView : RecyclerView
+    private lateinit var adapter: RecyclerAdapter
 
     companion object {
         val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
@@ -26,9 +34,21 @@ class MainActivity : AppCompatActivity() {
             return;
         }
 
+        model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
+        // Create the observer which updates the UI.
+        val videosObserver: Observer<List<Video>> = object : Observer<List<Video>> {
+            override fun onChanged(newVideos: List<Video>?) { // Update the UI
+                adapter = RecyclerAdapter(model.getData().value!!)
+                recyclerView.adapter = adapter
+            }
+        }
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        model.getData().observe(this, videosObserver)
+
         initUi()
 
-        model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
+        model.loadData()
     }
 
     // TODO add a view to list detected video
@@ -36,7 +56,17 @@ class MainActivity : AppCompatActivity() {
         val scanButton = findViewById<Button>(R.id.scan_button)
         scanButton.setOnClickListener {
             model.loadData()
+
         }
+
+        recyclerView = findViewById(R.id.videos_list)
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
+        if (model.videosLiveData.value != null) {
+            adapter = RecyclerAdapter(model.getData().value!!)
+            recyclerView.adapter = adapter
+        }
+
     }
 
     override fun onRequestPermissionsResult(
