@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity() {
             return;
         }
 
+        initUi()
+    }
+
+    // TODO add a view to list detected video
+    private fun initUi() {
         model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
         // Create the observer which updates the UI.
         val videosObserver: Observer<List<Video>> = object : Observer<List<Video>> {
@@ -46,13 +51,6 @@ class MainActivity : AppCompatActivity() {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         model.getData().observe(this, videosObserver)
 
-        initUi()
-
-        model.loadData()
-    }
-
-    // TODO add a view to list detected video
-    private fun initUi() {
         val scanButton = findViewById<Button>(R.id.scan_button)
         scanButton.setOnClickListener {
             model.loadData()
@@ -67,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = adapter
         }
 
+        model.loadData()
     }
 
     override fun onRequestPermissionsResult(
