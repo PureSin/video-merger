@@ -46,7 +46,7 @@ class VideoProcessor {
                     cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
                 val duration =
                     cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
-                videos.add(Video(id, name, timestamp, duration, null))
+                videos.add(Video(id, name, timestamp, duration))
             }
         }
         return videos
