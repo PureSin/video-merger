@@ -22,8 +22,8 @@
 
     <ImageView
         android:id="@+id/itemImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toTopOf="@+id/itemDate"
