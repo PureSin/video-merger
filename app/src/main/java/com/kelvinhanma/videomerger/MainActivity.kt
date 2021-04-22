@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: RecyclerAdapter
 
     companion object {
-        const val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
+        val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +40,11 @@ class MainActivity : AppCompatActivity() {
     private fun initUi() {
         model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
         // Create the observer which updates the UI.
-        val videosObserver: Observer<List<Video>> = Observer { // Update the UI
-            adapter = RecyclerAdapter(baseContext, model.getData().value!!)
-            recyclerView.adapter = adapter
+        val videosObserver: Observer<List<Video>> = object : Observer<List<Video>> {
+            override fun onChanged(newVideos: List<Video>?) { // Update the UI
+                adapter = RecyclerAdapter(baseContext, model.getData().value!!)
+                recyclerView.adapter = adapter
+            }
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
