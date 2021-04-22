@@ -1,3 +1,5 @@
 package com.kelvinhanma.videomerger.model
 
-data class Video(val id: String, val name: String, val dateTaken: Long, val duration: Int)
+import android.graphics.Bitmap
+
+data class Video(val id: Long, val name: String, val dateTaken: Long, val duration: Int, val preview: Bitmap?)
