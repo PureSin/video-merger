@@ -1,3 +1,3 @@
 package com.kelvinhanma.videomerger.model
 
-data class Video(val id: String, val name: String, val dateTaken: Long, val duration: Int)
+data class Video(val id: Long, val name: String, val dateTaken: Long, val duration: Int)

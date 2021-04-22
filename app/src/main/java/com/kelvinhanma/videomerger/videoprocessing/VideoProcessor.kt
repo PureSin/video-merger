@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import com.kelvinhanma.videomerger.model.Video
-import com.kelvinhanma.videomerger.util.toHumanReadableString
 import java.util.logging.Logger
 
 /**
@@ -33,24 +32,20 @@ class VideoProcessor {
             projection,
             null,
             null,
-            MediaStore.Video.VideoColumns.DATE_TAKEN + " ASC"
+            MediaStore.Video.VideoColumns.DATE_TAKEN + " ASC LIMIT 20"
         )?.use { cursor ->
             LOGGER.info("Result: " + cursor.count)
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
                 val id =
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
                 val name =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME))
                 val timestamp =
                     cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
                 val duration =
                     cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
-                LOGGER.info(
-                    id + " , " + name + ":" + timestamp.toHumanReadableString()
-                            + " , " + duration
-                )
                 videos.add(Video(id, name, timestamp, duration))
             }
         }
@@ -67,7 +62,7 @@ class VideoProcessor {
             var candidatesFound = false
             for (candidateVideoIndex in startIndex + 1 until size) {
                 val candidateVideo = videos[candidateVideoIndex]
-                if (candidateVideo.dateTaken in maxTime - allowedDeltaSecs .. maxTime + allowedDeltaSecs) {
+                if (candidateVideo.dateTaken in maxTime - allowedDeltaSecs..maxTime + allowedDeltaSecs) {
                     if (!candidatesFound) {
                         candidatesFound = true
                         val newList = ArrayList<Video>()
