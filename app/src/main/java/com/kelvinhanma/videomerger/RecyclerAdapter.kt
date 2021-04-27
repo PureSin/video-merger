@@ -28,46 +28,49 @@ class RecyclerAdapter(private val context: Context, private val videos: List<Vid
 
     override fun onBindViewHolder(holder: VideoHolder, position: Int) {
         val video = videos[position]
-        holder.name.text = video.name
-
-        if (video.dateTaken > 0) {
-            val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
-            val netDate = Date(video.dateTaken)
-            holder.time.text = sdf.format(netDate)
-        } else {
-            holder.time.visibility = View.INVISIBLE
-        }
-
-        if (video.duration > 0) {
-            holder.duration.text = TimeUnit.MICROSECONDS.toSeconds(video.duration.toLong()).toString()
-        } else {
-            holder.duration.visibility = View.INVISIBLE
-        }
-        val videoUri = ContentUris.withAppendedId(
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, video.id
-        )
-
-        Glide.with(context).load(videoUri).into(holder.previewImage)
+        holder.bind(context, video)
     }
 
-    class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
-        private var view: View = v
-        private var video: Video? = null
-        val name: TextView
-        val previewImage: ImageView
-        val time: TextView
-        val duration: TextView
-        init {
-            v.setOnClickListener(this)
-            name = v.findViewById(R.id.itemName)
-            previewImage = v.findViewById(R.id.itemImage)
-            time = v.findViewById(R.id.itemDate)
-            duration = v.findViewById(R.id.itemDuration)
+    class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener, View.OnLongClickListener {
+        val container: ViewGroup = v.findViewById(R.id.container)
+        val name: TextView = v.findViewById(R.id.itemName)
+        private val previewImage: ImageView = v.findViewById(R.id.itemImage)
+        private val time: TextView = v.findViewById(R.id.itemDate)
+        private val duration: TextView = v.findViewById(R.id.itemDuration)
+
+        fun bind(context: Context, video: Video) {
+            name.text = video.name
+
+            if (video.dateTaken > 0) {
+                val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
+                val netDate = Date(video.dateTaken)
+                time.text = sdf.format(netDate)
+            } else {
+                time.visibility = View.INVISIBLE
+            }
+
+            if (video.duration > 0) {
+                duration.text = TimeUnit.MICROSECONDS.toSeconds(video.duration.toLong()).toString()
+            } else {
+                duration.visibility = View.INVISIBLE
+            }
+            val videoUri = ContentUris.withAppendedId(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, video.id
+            )
+
+            Glide.with(context).load(videoUri).into(previewImage)
+
+            container.setOnClickListener(this)
+            container.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
-            // TODO play video? or just select it
-            Log.d("RecyclerAdapter", "clicked")
+            Log.d("RecyclerAdapter", "Playing video ")
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            Log.d("RecyclerAdapter", "Select")
+            return true
         }
     }
 }
