@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|start"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
         tools:text="Some date" />
 
     <TextView
@@ -33,7 +35,7 @@
         android:layout_gravity="center|start"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:maxLines="5"
+        android:maxLines="1"
         tools:text="Duration" />
 
     <ImageView
@@ -43,4 +45,9 @@
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true" />
 
+    <VideoView
+        android:id="@+id/videoPlayer"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:visibility="gone" />
 </LinearLayout>

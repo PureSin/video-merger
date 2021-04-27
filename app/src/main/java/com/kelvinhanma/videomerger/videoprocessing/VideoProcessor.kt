@@ -3,6 +3,7 @@ package com.kelvinhanma.videomerger.videoprocessing
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.kelvinhanma.videomerger.model.Video
 import java.util.logging.Logger
 
@@ -46,7 +47,9 @@ class VideoProcessor {
                     cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
                 val duration =
                     cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
-                videos.add(Video(id, name, timestamp, duration))
+                val video = Video(id, name, timestamp, duration)
+                LOGGER.info(video.toString())
+                videos.add(video)
             }
         }
         return videos
