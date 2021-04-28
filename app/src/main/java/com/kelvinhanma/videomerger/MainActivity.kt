@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: RecyclerAdapter
 
     companion object {
-        val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
+        const val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         // Create the observer which updates the UI.
         val videosObserver: Observer<List<Video>> = object : Observer<List<Video>> {
             override fun onChanged(newVideos: List<Video>?) { // Update the UI
-                adapter = RecyclerAdapter(baseContext, model.getData().value!!)
+                adapter = RecyclerAdapter(baseContext, model)
                 recyclerView.adapter = adapter
             }
         }
@@ -53,14 +53,16 @@ class MainActivity : AppCompatActivity() {
         val scanButton = findViewById<Button>(R.id.scan_button)
         scanButton.setOnClickListener {
             model.loadData()
-
         }
+
+        val mergeButton = findViewById<Button>(R.id.mergeButton)
+        mergeButton.setOnClickListener { model.mergeVideos() }
 
         recyclerView = findViewById(R.id.videos_list)
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
         if (model.videosLiveData.value != null) {
-            adapter = RecyclerAdapter(baseContext, model.getData().value!!)
+            adapter = RecyclerAdapter(baseContext, model)
             recyclerView.adapter = adapter
         }
 

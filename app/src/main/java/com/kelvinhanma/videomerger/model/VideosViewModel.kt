@@ -11,11 +11,14 @@ import com.kelvinhanma.videomerger.videoprocessing.VideoProcessor
 
 class VideosViewModel(applicationContext: Application) : AndroidViewModel(applicationContext) {
     var videosLiveData: MutableLiveData<List<Video>>
+    // TODO resolve context leak
     val context: Context = applicationContext
+    val selectedVideos: MutableList<Video>
 
     init {
         Log.i("Model", "creating model")
         videosLiveData = MutableLiveData()
+        selectedVideos = ArrayList()
     }
 
     fun getData(): LiveData<List<Video>> {
@@ -23,7 +26,19 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
     }
 
     fun loadData() {
-        LoadDataTask(videosLiveData, context).execute();
+        LoadDataTask(videosLiveData, context).execute()
+    }
+
+    fun mergeVideos() {
+        MergeVideosTask(selectedVideos, context).execute()
+    }
+
+    fun addSelectedVideo(video: Video) {
+        selectedVideos.add(video)
+    }
+
+    fun removeSelectedVideo(video: Video) {
+        selectedVideos.remove(video)
     }
 
     private class LoadDataTask(
@@ -39,6 +54,21 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
 
         override fun onPostExecute(result: List<Video>) {
             videosLiveData.value = result
+        }
+    }
+
+    private class MergeVideosTask(
+        selectVideos: List<Video>,
+        context: Context
+    ) : AsyncTask<Void, Void, Video>() {
+        val selectVideos: List<Video> = selectVideos
+        val context = context
+
+        override fun doInBackground(vararg urls: Void) : Video {
+            return VideoProcessor().mergeSelectedVideos(context, selectVideos)
+        }
+
+        override fun onPostExecute(result: Video) {
         }
     }
 }

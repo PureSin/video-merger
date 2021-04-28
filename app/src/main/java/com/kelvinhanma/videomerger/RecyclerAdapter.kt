@@ -2,6 +2,7 @@ package com.kelvinhanma.videomerger
 
 import android.content.ContentUris
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -13,12 +14,13 @@ import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kelvinhanma.videomerger.model.Video
+import com.kelvinhanma.videomerger.model.VideosViewModel
 import com.kelvinhanma.videomerger.util.inflate
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RecyclerAdapter(private val context: Context, private val videos: List<Video>) :
+class RecyclerAdapter(private val context: Context, private val viewModel: VideosViewModel) :
     RecyclerView.Adapter<RecyclerAdapter.VideoHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoHolder {
@@ -26,15 +28,16 @@ class RecyclerAdapter(private val context: Context, private val videos: List<Vid
         return VideoHolder(inflatedView)
     }
 
-    override fun getItemCount() = videos.size
+    override fun getItemCount() = viewModel.videosLiveData.value!!.size
 
     override fun onBindViewHolder(holder: VideoHolder, position: Int) {
-        val video = videos[position]
-        holder.bind(context, video)
+        val video = viewModel.videosLiveData.value!![position]
+        holder.bind(context, video, viewModel)
     }
 
     class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener, View.OnLongClickListener {
-        val container: ViewGroup = v.findViewById(R.id.container)
+        private val container: ViewGroup = v.findViewById(R.id.container)
+        private lateinit var model: VideosViewModel
         val name: TextView = v.findViewById(R.id.itemName)
         private val previewImage: ImageView = v.findViewById(R.id.itemImage)
         private val time: TextView = v.findViewById(R.id.itemDate)
@@ -43,8 +46,10 @@ class RecyclerAdapter(private val context: Context, private val videos: List<Vid
         private lateinit var video : Video
         private lateinit var videoUri : Uri
         private var isPlaying = false
+        private var isSelected = false
 
-        fun bind(context: Context, video: Video) {
+        fun bind(context: Context, video: Video, model: VideosViewModel) {
+            this.model = model
             this.video = video
             name.text = video.name
 
@@ -88,6 +93,15 @@ class RecyclerAdapter(private val context: Context, private val videos: List<Vid
 
         override fun onLongClick(v: View?): Boolean {
             Log.d("RecyclerAdapter", "Selected $videoUri")
+            isSelected = !isSelected
+            // TODO pick better colors
+            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
+            // TODO figure out better abstraction for this
+            if (isSelected) {
+                model.addSelectedVideo(video)
+            } else {
+                model.removeSelectedVideo(video)
+            }
             return true
         }
     }

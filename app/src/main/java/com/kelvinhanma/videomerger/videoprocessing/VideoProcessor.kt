@@ -55,6 +55,11 @@ class VideoProcessor {
         return videos
     }
 
+    fun mergeSelectedVideos(context: Context, videos: List<Video>) : Video {
+        LOGGER.info("Merging Videos: $videos")
+        return Video(1, "Test", 2, 3)
+    }
+
     // TODO write tests
     fun detectMergeableVideos(videos: List<Video>, allowedDeltaSecs: Int = 5): List<List<Video>> {
         val result = ArrayList<ArrayList<Video>>()
