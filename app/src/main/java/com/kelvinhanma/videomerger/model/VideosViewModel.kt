@@ -60,15 +60,15 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
     private class MergeVideosTask(
         selectVideos: List<Video>,
         context: Context
-    ) : AsyncTask<Void, Void, Video>() {
+    ) : AsyncTask<Void, Void, Video?>() {
         val selectVideos: List<Video> = selectVideos
         val context = context
 
-        override fun doInBackground(vararg urls: Void) : Video {
+        override fun doInBackground(vararg urls: Void) : Video? {
             return VideoProcessor().mergeSelectedVideos(context, selectVideos)
         }
 
-        override fun onPostExecute(result: Video) {
+        override fun onPostExecute(result: Video?) {
         }
     }
 }
