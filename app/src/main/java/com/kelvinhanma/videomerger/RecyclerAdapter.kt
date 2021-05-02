@@ -50,19 +50,19 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
         fun bind(context: Context, video: Video, model: VideosViewModel) {
             this.model = model
             this.video = video
-            name.text = video.name
+            name.text = "Title: ${video.name}"
 
             // TODO figure out why duration/date aren't showing
             if (video.dateTaken > 0) {
                 val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
                 val netDate = Date(video.dateTaken)
-                time.text = sdf.format(netDate)
+                time.text = "Date: " + sdf.format(netDate)
             } else {
                 time.visibility = View.INVISIBLE
             }
 
             if (video.duration > 0) {
-                duration.text = TimeUnit.MICROSECONDS.toSeconds(video.duration.toLong()).toString()
+                duration.text = "Duration: " + TimeUnit.MICROSECONDS.toSeconds(video.duration.toLong()).toString()
             } else {
                 duration.visibility = View.INVISIBLE
             }
