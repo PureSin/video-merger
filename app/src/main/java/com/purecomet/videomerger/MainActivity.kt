@@ -1,4 +1,4 @@
-package com.kelvinhanma.videomerger
+package com.purecomet.videomerger
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kelvinhanma.videomerger.model.Video
-import com.kelvinhanma.videomerger.model.VideosViewModel
+import com.purecomet.videomerger.model.Video
+import com.purecomet.videomerger.model.VideosViewModel
 
 
 class MainActivity : AppCompatActivity() {

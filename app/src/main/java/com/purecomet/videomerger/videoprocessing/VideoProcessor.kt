@@ -1,4 +1,4 @@
-package com.kelvinhanma.videomerger.videoprocessing
+package com.purecomet.videomerger.videoprocessing
 
 import android.content.ContentUris
 import android.content.ContentValues
@@ -12,7 +12,7 @@ import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
-import com.kelvinhanma.videomerger.model.Video
+import com.purecomet.videomerger.model.Video
 import java.io.*
 import java.util.logging.Logger
 
