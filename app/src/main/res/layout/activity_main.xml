@@ -16,6 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/selectedCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/videos_list"
+        app:layout_constraintEnd_toStartOf="@+id/mergeButton"
+        app:layout_constraintStart_toEndOf="@+id/scan_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/mergeButton"
         android:layout_width="wrap_content"

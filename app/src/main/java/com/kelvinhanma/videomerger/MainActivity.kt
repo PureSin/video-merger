@@ -5,10 +5,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kelvinhanma.videomerger.model.Video
@@ -38,13 +40,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
+        val selectedVideosTextView = findViewById<TextView>(R.id.selectedCount)
         model = ViewModelProviders.of(this).get(VideosViewModel::class.java)
         // Create the observer which updates the UI.
-        val videosObserver: Observer<List<Video>> = object : Observer<List<Video>> {
-            override fun onChanged(newVideos: List<Video>?) { // Update the UI
-                adapter = RecyclerAdapter(baseContext, model)
-                recyclerView.adapter = adapter
-            }
+        val videosObserver: Observer<List<Video>> = Observer { // Update the UI
+            adapter = RecyclerAdapter(baseContext, model)
+            recyclerView.adapter = adapter
+            selectedVideosTextView.setText("Selected ${model.selectedVideos.size} videos.")
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -65,7 +67,11 @@ class MainActivity : AppCompatActivity() {
             adapter = RecyclerAdapter(baseContext, model)
             recyclerView.adapter = adapter
         }
-
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView.context,
+            DividerItemDecoration.VERTICAL
+        )
+        recyclerView.addItemDecoration(dividerItemDecoration)
         model.loadData()
     }
 

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -54,6 +55,7 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
 
         override fun onPostExecute(result: List<Video>) {
             videosLiveData.value = result
+            Toast.makeText(context, "Found ${result.size} videos.", Toast.LENGTH_SHORT).show()
         }
     }
 
