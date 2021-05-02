@@ -1,8 +1,10 @@
 package com.kelvinhanma.videomerger.videoprocessing
 
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -49,23 +51,30 @@ class VideoProcessor {
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
-                val id =
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
-                val name =
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME))
-                val timestamp =
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
-                val duration =
-                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
-                // TODO use contentprovider and fd instead?
-                val filePath =
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATA))
-                val video = Video(id, name, timestamp, duration, filePath)
+                val video = createVideoFromCursor(cursor)
                 LOGGER.info(video.toString())
                 videos.add(video)
             }
         }
         return videos
+    }
+
+    private fun createVideoFromCursor(cursor: Cursor): Video {
+        val id =
+            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
+        val name =
+            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME))
+        val timestamp =
+            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
+        val duration =
+            cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
+        // TODO use contentprovider and fd instead?
+        val videoUri = ContentUris.withAppendedId(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id
+        )
+        val filePath =
+            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATA))
+        return Video(id, name, timestamp, duration, videoUri, filePath)
     }
 
     fun mergeSelectedVideos(context: Context, videos: List<Video>): Video? {
@@ -126,7 +135,7 @@ class VideoProcessor {
         // TODO handle failure paths to also delete
         context.deleteFile(inputFile)
         context.deleteFile(outputVideo)
-        
+
         // query to get data for video
         context.contentResolver.query(
             uri,
@@ -139,18 +148,7 @@ class VideoProcessor {
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
-                val id =
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns._ID))
-                val name =
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DISPLAY_NAME))
-                val timestamp =
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATE_TAKEN))
-                val duration =
-                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION))
-                // TODO use contentprovider and fd instead?
-                val filePath =
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DATA))
-                val video = Video(id, name, timestamp, duration, filePath)
+                val video = createVideoFromCursor(cursor)
                 LOGGER.info("Created $video")
                 return video;
             }
