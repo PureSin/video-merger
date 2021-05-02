@@ -71,6 +71,8 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
 
             container.setOnClickListener(this)
             container.setOnLongClickListener(this)
+            isSelected = model.selectedVideos.contains(video)
+            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
         }
 
         override fun onClick(v: View?) {
@@ -79,7 +81,6 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
 
             previewImage.visibility = if (isPlaying) View.GONE else View.VISIBLE
             videoPlayer.visibility = if (isPlaying) View.VISIBLE else View.GONE
-
             if (isPlaying) {
                 videoPlayer.start()
             } else {
@@ -91,13 +92,14 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
             Log.d("RecyclerAdapter", "Selected ${video.uri}")
             isSelected = !isSelected
             // TODO pick better colors
-            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
             // TODO figure out better abstraction for this
             if (isSelected) {
                 model.addSelectedVideo(video)
             } else {
                 model.removeSelectedVideo(video)
             }
+            isSelected = model.selectedVideos.contains(video)
+            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
             return true
         }
     }
