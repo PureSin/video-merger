@@ -58,13 +58,13 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
                 val netDate = Date(video.dateTaken)
                 time.text = "Date: " + sdf.format(netDate)
             } else {
-                time.visibility = View.INVISIBLE
+                time.visibility = View.GONE
             }
 
             if (video.duration > 0) {
-                duration.text = "Duration: " + TimeUnit.MICROSECONDS.toSeconds(video.duration.toLong()).toString()
+                duration.text = "Duration: ${TimeUnit.MILLISECONDS.toSeconds(video.duration.toLong())}s"
             } else {
-                duration.visibility = View.INVISIBLE
+                duration.visibility = View.GONE
             }
             videoPlayer.setVideoURI(video.uri)
             Glide.with(context).load(video.uri).into(previewImage)

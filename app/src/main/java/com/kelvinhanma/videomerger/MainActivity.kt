@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kelvinhanma.videomerger.model.Video
@@ -65,7 +66,11 @@ class MainActivity : AppCompatActivity() {
             adapter = RecyclerAdapter(baseContext, model)
             recyclerView.adapter = adapter
         }
-
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView.context,
+            DividerItemDecoration.VERTICAL
+        )
+        recyclerView.addItemDecoration(dividerItemDecoration)
         model.loadData()
     }
 
