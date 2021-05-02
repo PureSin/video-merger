@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.purecomet.videomerger.model.Video
 import com.purecomet.videomerger.model.VideosViewModel
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter: RecyclerAdapter
+    private lateinit var swipeContainer: SwipeRefreshLayout
 
     companion object {
         const val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
@@ -46,14 +48,20 @@ class MainActivity : AppCompatActivity() {
         val videosObserver: Observer<List<Video>> = Observer { // Update the UI
             adapter = RecyclerAdapter(baseContext, model)
             recyclerView.adapter = adapter
-            selectedVideosTextView.setText("Selected ${model.selectedVideos.size} videos.")
+
+            swipeContainer.isRefreshing = false
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        model.getData().observe(this, videosObserver)
+        model.getVideosData().observe(this, videosObserver)
 
-        val scanButton = findViewById<Button>(R.id.scan_button)
-        scanButton.setOnClickListener {
+        val selectedObserver: Observer<MutableList<Video>> = Observer {
+            selectedVideosTextView.text = "Selected ${model.selectedVideos.value!!.size} videos."
+        }
+        model.getSelectedVideosData().observe(this, selectedObserver)
+
+        swipeContainer = findViewById(R.id.swipeContainer)
+        swipeContainer.setOnRefreshListener {
             model.loadData()
         }
 

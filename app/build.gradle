@@ -49,4 +49,7 @@ dependencies {
     // ffmpeg for video merging
     // TODO optimize apk size?
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+
+    // SwipeRefreshLayout for pull to refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 }

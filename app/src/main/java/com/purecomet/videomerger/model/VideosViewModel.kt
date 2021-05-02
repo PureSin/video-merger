@@ -11,19 +11,25 @@ import androidx.lifecycle.MutableLiveData
 import com.purecomet.videomerger.videoprocessing.VideoProcessor
 
 class VideosViewModel(applicationContext: Application) : AndroidViewModel(applicationContext) {
-    var videosLiveData: MutableLiveData<List<Video>>
     // TODO resolve context leak
     val context: Context = applicationContext
-    val selectedVideos: MutableList<Video>
+    var videosLiveData: MutableLiveData<List<Video>>
+    // TODO this shouldn't be mutable but I also don't want to copy the list each update
+    val selectedVideos: MutableLiveData<MutableList<Video>>
 
     init {
         Log.i("Model", "creating model")
         videosLiveData = MutableLiveData()
-        selectedVideos = ArrayList()
+        selectedVideos = MutableLiveData()
+        selectedVideos.value = ArrayList()
     }
 
-    fun getData(): LiveData<List<Video>> {
+    fun getVideosData(): LiveData<List<Video>> {
         return videosLiveData
+    }
+
+    fun getSelectedVideosData() : LiveData<MutableList<Video>> {
+        return selectedVideos
     }
 
     fun loadData() {
@@ -31,15 +37,17 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
     }
 
     fun mergeVideos() {
-        MergeVideosTask(selectedVideos, context).execute()
+        MergeVideosTask(selectedVideos.value!!, context).execute()
     }
 
     fun addSelectedVideo(video: Video) {
-        selectedVideos.add(video)
+        selectedVideos.value!!.add(video)
+        selectedVideos.value = selectedVideos.value
     }
 
     fun removeSelectedVideo(video: Video) {
-        selectedVideos.remove(video)
+        selectedVideos.value!!.remove(video)
+        selectedVideos.value = selectedVideos.value
     }
 
     private class LoadDataTask(
