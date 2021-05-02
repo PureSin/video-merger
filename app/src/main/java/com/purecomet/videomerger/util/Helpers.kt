@@ -1,4 +1,4 @@
-package com.kelvinhanma.videomerger.util
+package com.purecomet.videomerger.util
 
 import android.view.LayoutInflater
 import android.view.View

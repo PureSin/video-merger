@@ -1,4 +1,4 @@
-package com.kelvinhanma.videomerger.model
+package com.purecomet.videomerger.model
 
 import android.net.Uri
 

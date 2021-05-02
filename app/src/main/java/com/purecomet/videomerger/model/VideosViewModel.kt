@@ -1,4 +1,4 @@
-package com.kelvinhanma.videomerger.model
+package com.purecomet.videomerger.model
 
 import android.app.Application
 import android.content.Context
@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kelvinhanma.videomerger.videoprocessing.VideoProcessor
+import com.purecomet.videomerger.videoprocessing.VideoProcessor
 
 class VideosViewModel(applicationContext: Application) : AndroidViewModel(applicationContext) {
     var videosLiveData: MutableLiveData<List<Video>>
