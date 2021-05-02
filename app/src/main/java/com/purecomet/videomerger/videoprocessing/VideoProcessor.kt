@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
@@ -150,6 +151,7 @@ class VideoProcessor {
                 // a URI representing the media item itself.
                 val video = createVideoFromCursor(cursor)
                 LOGGER.info("Created $video")
+                Toast.makeText(context, "Created merged video.", Toast.LENGTH_LONG).show()
                 return video;
             }
         }
