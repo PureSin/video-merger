@@ -48,12 +48,17 @@ class MainActivity : AppCompatActivity() {
         val videosObserver: Observer<List<Video>> = Observer { // Update the UI
             adapter = RecyclerAdapter(baseContext, model)
             recyclerView.adapter = adapter
-            selectedVideosTextView.text = "Selected ${model.selectedVideos.size} videos."
+
             swipeContainer.isRefreshing = false
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        model.getData().observe(this, videosObserver)
+        model.getVideosData().observe(this, videosObserver)
+
+        val selectedObserver: Observer<MutableList<Video>> = Observer {
+            selectedVideosTextView.text = "Selected ${model.selectedVideos.value!!.size} videos."
+        }
+        model.getSelectedVideosData().observe(this, selectedObserver)
 
         swipeContainer = findViewById(R.id.swipeContainer)
         swipeContainer.setOnRefreshListener {

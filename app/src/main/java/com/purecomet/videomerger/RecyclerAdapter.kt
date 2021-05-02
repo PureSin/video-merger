@@ -68,7 +68,7 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
 
             container.setOnClickListener(this)
             container.setOnLongClickListener(this)
-            isSelected = model.selectedVideos.contains(video)
+            isSelected = model.selectedVideos.value!!.contains(video)
             container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
         }
 
@@ -95,7 +95,7 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
             } else {
                 model.removeSelectedVideo(video)
             }
-            isSelected = model.selectedVideos.contains(video)
+            isSelected = model.selectedVideos.value!!.contains(video)
             container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
             return true
         }
