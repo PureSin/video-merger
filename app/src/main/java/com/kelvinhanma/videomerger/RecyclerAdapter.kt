@@ -44,7 +44,6 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
         private val duration: TextView = v.findViewById(R.id.itemDuration)
         private val videoPlayer : VideoView = v.findViewById(R.id.videoPlayer)
         private lateinit var video : Video
-        private lateinit var videoUri : Uri
         private var isPlaying = false
         private var isSelected = false
 
@@ -67,23 +66,21 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
             } else {
                 duration.visibility = View.INVISIBLE
             }
-            videoUri = ContentUris.withAppendedId(
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, video.id
-            )
-            videoPlayer.setVideoURI(videoUri)
-            Glide.with(context).load(videoUri).into(previewImage)
+            videoPlayer.setVideoURI(video.uri)
+            Glide.with(context).load(video.uri).into(previewImage)
 
             container.setOnClickListener(this)
             container.setOnLongClickListener(this)
+            isSelected = model.selectedVideos.contains(video)
+            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
         }
 
         override fun onClick(v: View?) {
-            Log.d("RecyclerAdapter", "Tap on $videoUri with status $isPlaying")
+            Log.d("RecyclerAdapter", "Tap on ${video.uri} with status $isPlaying")
             isPlaying = !isPlaying
 
             previewImage.visibility = if (isPlaying) View.GONE else View.VISIBLE
             videoPlayer.visibility = if (isPlaying) View.VISIBLE else View.GONE
-
             if (isPlaying) {
                 videoPlayer.start()
             } else {
@@ -92,16 +89,17 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
         }
 
         override fun onLongClick(v: View?): Boolean {
-            Log.d("RecyclerAdapter", "Selected $videoUri")
+            Log.d("RecyclerAdapter", "Selected ${video.uri}")
             isSelected = !isSelected
             // TODO pick better colors
-            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
             // TODO figure out better abstraction for this
             if (isSelected) {
                 model.addSelectedVideo(video)
             } else {
                 model.removeSelectedVideo(video)
             }
+            isSelected = model.selectedVideos.contains(video)
+            container.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
             return true
         }
     }
