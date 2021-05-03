@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.purecomet.videomerger.R
 import com.purecomet.videomerger.videoprocessing.VideoProcessor
 
 class VideosViewModel(applicationContext: Application) : AndroidViewModel(applicationContext) {
     // TODO resolve context leak
     val context: Context = applicationContext
     var videosLiveData: MutableLiveData<List<Video>>
+
     // TODO this shouldn't be mutable but I also don't want to copy the list each update
     val selectedVideos: MutableLiveData<MutableList<Video>>
 
@@ -28,7 +30,7 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
         return videosLiveData
     }
 
-    fun getSelectedVideosData() : LiveData<MutableList<Video>> {
+    fun getSelectedVideosData(): LiveData<MutableList<Video>> {
         return selectedVideos
     }
 
@@ -63,7 +65,11 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
 
         override fun onPostExecute(result: List<Video>) {
             videosLiveData.value = result
-            Toast.makeText(context, "Found ${result.size} videos.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.scan_toast, result.size),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -74,7 +80,7 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
         val selectVideos: List<Video> = selectVideos
         val context = context
 
-        override fun doInBackground(vararg urls: Void) : Video? {
+        override fun doInBackground(vararg urls: Void): Video? {
             return VideoProcessor().mergeSelectedVideos(context, selectVideos)
         }
 

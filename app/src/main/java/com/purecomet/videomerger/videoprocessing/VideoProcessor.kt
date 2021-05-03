@@ -13,6 +13,7 @@ import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
+import com.purecomet.videomerger.R
 import com.purecomet.videomerger.model.Video
 import java.io.*
 import java.util.logging.Logger
@@ -96,7 +97,8 @@ class VideoProcessor {
         outputWriter.write(sb.toString())
         outputWriter.close()
 
-        when (val rc = FFmpeg.execute("-y -f concat -safe -0 -i \"$packageDir/$inputFile\" -c copy $packageDir/$outputVideo")) {
+        when (val rc =
+            FFmpeg.execute("-y -f concat -safe -0 -i \"$packageDir/$inputFile\" -c copy $packageDir/$outputVideo")) {
             RETURN_CODE_SUCCESS -> {
                 LOGGER.info("Command execution completed successfully.")
             }
@@ -151,7 +153,11 @@ class VideoProcessor {
                 // a URI representing the media item itself.
                 val video = createVideoFromCursor(cursor)
                 LOGGER.info("Created $video")
-                Toast.makeText(context, "Created merged video.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.created_video, video.name),
+                    Toast.LENGTH_LONG
+                ).show()
                 return video;
             }
         }

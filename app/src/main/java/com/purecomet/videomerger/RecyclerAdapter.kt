@@ -32,34 +32,38 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
         holder.bind(context, video, viewModel)
     }
 
-    class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener, View.OnLongClickListener {
+    class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener,
+        View.OnLongClickListener {
         private val container: ViewGroup = v.findViewById(R.id.container)
         private lateinit var model: VideosViewModel
         val name: TextView = v.findViewById(R.id.itemName)
         private val previewImage: ImageView = v.findViewById(R.id.itemImage)
         private val time: TextView = v.findViewById(R.id.itemDate)
         private val duration: TextView = v.findViewById(R.id.itemDuration)
-        private val videoPlayer : VideoView = v.findViewById(R.id.videoPlayer)
-        private lateinit var video : Video
+        private val videoPlayer: VideoView = v.findViewById(R.id.videoPlayer)
+        private lateinit var video: Video
         private var isPlaying = false
         private var isSelected = false
 
         fun bind(context: Context, video: Video, model: VideosViewModel) {
             this.model = model
             this.video = video
-            name.text = "Title: ${video.name}"
+            name.text = context.resources.getString(R.string.video_title, video.name)
 
             // TODO figure out why duration/date aren't showing
             if (video.dateTaken > 0) {
                 val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
                 val netDate = Date(video.dateTaken)
-                time.text = "Date: " + sdf.format(netDate)
+                time.text = context.resources.getString(R.string.video_date, sdf.format(netDate))
             } else {
                 time.visibility = View.GONE
             }
 
             if (video.duration > 0) {
-                duration.text = "Duration: ${TimeUnit.MILLISECONDS.toSeconds(video.duration.toLong())}s"
+                duration.text = context.resources.getString(
+                    R.string.video_duration,
+                    TimeUnit.MILLISECONDS.toSeconds(video.duration.toLong())
+                )
             } else {
                 duration.visibility = View.GONE
             }

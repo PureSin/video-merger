@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Video Merger</string>
+    <string name="video_title">Title: %s</string>
+    <string name="video_date">Date: %s</string>
+    <string name="video_duration">Duration: %ds</string>
+    <string name="created_video">Merged video: %s.</string>
+    <string name="scan_toast">Found %d videos.</string>
+    <plurals name="select_videos">
+        <item quantity="one" formatted="true">Selected %d video.</item>
+        <item quantity="other" formatted="true">Selected %d videos.</item>
+    </plurals>
 </resources>

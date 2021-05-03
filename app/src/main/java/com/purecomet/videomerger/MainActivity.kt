@@ -21,7 +21,7 @@ import com.purecomet.videomerger.model.VideosViewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var model: VideosViewModel
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     private lateinit var swipeContainer: SwipeRefreshLayout
 
@@ -56,7 +56,11 @@ class MainActivity : AppCompatActivity() {
         model.getVideosData().observe(this, videosObserver)
 
         val selectedObserver: Observer<MutableList<Video>> = Observer {
-            selectedVideosTextView.text = "Selected ${model.selectedVideos.value!!.size} videos."
+            selectedVideosTextView.text = resources.getQuantityString(
+                R.plurals.select_videos,
+                model.selectedVideos.value!!.size,
+                model.selectedVideos.value!!.size
+            )
         }
         model.getSelectedVideosData().observe(this, selectedObserver)
 
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode) {
+        when (requestCode) {
             READ_EXTERNAL_STORAGE_PERMISSION_REQUEST -> {
                 initUi()
                 return
