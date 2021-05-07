@@ -127,7 +127,8 @@ class VideoProcessor {
         LOGGER.info("MediaStore uri for insert: $uri")
         // Write to the uri
         uri.let {
-            copy(openFileInput, contentResolver.openOutputStream(it)!!)
+            val openOutputStream = contentResolver.openOutputStream(it) ?: return null
+            copy(openFileInput, openOutputStream)
 
             values.clear()
             values.put(MediaStore.Video.Media.IS_PENDING, 0)

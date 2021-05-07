@@ -25,11 +25,14 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
         return VideoHolder(inflatedView)
     }
 
-    override fun getItemCount() = viewModel.videosLiveData.value!!.size
+    override fun getItemCount() = viewModel.videosLiveData.value?.size ?: 0
 
     override fun onBindViewHolder(holder: VideoHolder, position: Int) {
-        val video = viewModel.videosLiveData.value!![position]
-        holder.bind(context, video, viewModel)
+        assert(viewModel.videosLiveData.value != null)
+        val video = viewModel.videosLiveData.value?.get(position)
+        if (video != null) {
+            holder.bind(context, video, viewModel)
+        }
     }
 
     class VideoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener,
