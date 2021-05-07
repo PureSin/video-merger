@@ -66,11 +66,11 @@ class MainActivity : AppCompatActivity() {
 
         swipeContainer = findViewById(R.id.swipeContainer)
         swipeContainer.setOnRefreshListener {
-            model.loadData()
+            model.loadData(baseContext)
         }
 
         val mergeButton = findViewById<Button>(R.id.mergeButton)
-        mergeButton.setOnClickListener { model.mergeVideos() }
+        mergeButton.setOnClickListener { model.mergeVideos(baseContext) }
 
         recyclerView = findViewById(R.id.videos_list)
         linearLayoutManager = LinearLayoutManager(this)
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             DividerItemDecoration.VERTICAL
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
-        model.loadData()
+        model.loadData(baseContext)
     }
 
     override fun onRequestPermissionsResult(

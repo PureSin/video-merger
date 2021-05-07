@@ -50,7 +50,6 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
             this.video = video
             name.text = context.resources.getString(R.string.video_title, video.name)
 
-            // TODO figure out why duration/date aren't showing
             if (video.dateTaken > 0) {
                 val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
                 val netDate = Date(video.dateTaken)
@@ -93,7 +92,6 @@ class RecyclerAdapter(private val context: Context, private val viewModel: Video
             Log.d("RecyclerAdapter", "Selected ${video.uri}")
             isSelected = !isSelected
             // TODO pick better colors
-            // TODO figure out better abstraction for this
             if (isSelected) {
                 model.addSelectedVideo(video)
             } else {
