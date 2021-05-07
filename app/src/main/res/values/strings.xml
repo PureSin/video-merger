@@ -5,6 +5,7 @@
     <string name="video_duration">Duration: %ds</string>
     <string name="created_video">Merged video: %s.</string>
     <string name="scan_toast">Found %d videos.</string>
+    <string name="instruction">Tap to play, hold to select.</string>
     <plurals name="select_videos">
         <item quantity="one" formatted="true">Selected %d video.</item>
         <item quantity="other" formatted="true">Selected %d videos.</item>
