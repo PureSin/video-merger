@@ -47,7 +47,7 @@ class VideoProcessor {
             projects,
             null,
             null,
-            MediaStore.Video.VideoColumns.DATE_TAKEN + " ASC LIMIT 20"
+            MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC"
         )?.use { cursor ->
             LOGGER.info("Result: " + cursor.count)
             while (cursor.moveToNext()) {
@@ -154,11 +154,6 @@ class VideoProcessor {
                 // a URI representing the media item itself.
                 val video = createVideoFromCursor(cursor)
                 LOGGER.info("Created $video")
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.created_video, video.name),
-                    Toast.LENGTH_LONG
-                ).show()
                 return video;
             }
         }

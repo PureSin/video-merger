@@ -83,6 +83,13 @@ class VideosViewModel(applicationContext: Application) : AndroidViewModel(applic
         }
 
         override fun onPostExecute(result: Video?) {
+            if (result != null) {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.created_video, result.name),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 }
